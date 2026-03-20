@@ -2,10 +2,985 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>確認</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <title>業務フォーム</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 4px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 0 0 14px;
+      text-align: center;
+      color: #1f2937;
+    }
+
+    .subtext {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 20px;
+      line-height: 1.8;
+      font-size: 19px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .screen-top {
+      height: 1px;
+      width: 100%;
+    }
+
+    .box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .box-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .box-text {
+      color: #4b5563;
+      line-height: 1.8;
+      font-size: 19px;
+      white-space: pre-line;
+    }
+
+    .link-list a {
+      display: block;
+      margin-top: 10px;
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #111827;
+      font-size: 28px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 26px 20px;
+      border: 3px solid #cfd8e3;
+      border-radius: 18px;
+      box-sizing: border-box;
+      font-size: 28px !important;
+      line-height: 1.45;
+      background: #fff;
+      color: #111827;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    input,
+    select {
+      min-height: 100px;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #1976d2;
+      box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.14);
+      font-size: 28px !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      font-size: 24px;
+      color: #9ca3af;
+    }
+
+    .readonly {
+      background: #f3f4f6;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .input-row .grow {
+      flex: 1;
+    }
+
+    .qr-btn {
+      width: 110px;
+      min-width: 110px;
+      min-height: 100px;
+      border: none;
+      border-radius: 18px;
+      background: #111827;
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .small-note {
+      margin-top: 8px;
+      color: #6b7280;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .lookup-status {
+      margin-top: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      min-height: 28px;
+    }
+
+    .lookup-ok {
+      color: #15803d;
+    }
+
+    .lookup-ng {
+      color: #dc2626;
+    }
+
+    .lookup-loading {
+      color: #1976d2;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 22px 18px;
+      min-height: 84px;
+      border: none;
+      border-radius: 16px;
+      font-size: 40px;
+      font-weight: bold;
+      line-height: 1.2;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #1976d2;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn-green {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-orange {
+      background: #ea580c;
+      color: white;
+    }
+
+    .btn-purple {
+      background: #7c3aed;
+      color: white;
+    }
+
+    .btn-double {
+      min-height: 128px;
+    }
+
+    .btn-triple {
+      min-height: 178px;
+    }
+
+    .message {
+      margin-top: 18px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .loading {
+      color: #1976d2;
+    }
+
+    .done-icon {
+      font-size: 60px;
+      text-align: center;
+      margin: 10px 0 16px;
+    }
+
+    .done-text {
+      text-align: center;
+      font-size: 21px;
+      line-height: 1.9;
+      color: #374151;
+      margin-bottom: 20px;
+    }
+
+    .top-badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .qr-modal.active {
+      display: flex;
+    }
+
+    .qr-card {
+      width: 100%;
+      max-width: 720px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .qr-title {
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #111827;
+    }
+
+    .qr-desc {
+      font-size: 18px;
+      color: #4b5563;
+      line-height: 1.7;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    #qrReader {
+      width: 100%;
+      min-height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .file-scan-box {
+      margin-top: 14px;
+      padding: 14px;
+      border: 2px dashed #cfd8e3;
+      border-radius: 14px;
+      background: #f9fafb;
+    }
+
+    .file-scan-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-align: center;
+      color: #111827;
+    }
+
+    .file-scan-note {
+      font-size: 16px;
+      color: #6b7280;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .file-input {
+      width: 100%;
+      font-size: 20px;
+      padding: 10px;
+    }
+
+    .qr-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .qr-actions button {
+      flex: 1;
+      min-height: 72px;
+      border: none;
+      border-radius: 14px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .qr-close {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .qr-start {
+      background: #1976d2;
+      color: #fff;
+    }
+
+    .qr-status {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #1976d2;
+      min-height: 28px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 2px;
+      }
+
+      .container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 8px;
+        border-radius: 12px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      .subtext {
+        font-size: 18px;
+      }
+
+      .box-title {
+        font-size: 22px;
+      }
+
+      .box-text,
+      .link-list a {
+        font-size: 18px;
+      }
+
+      label {
+        font-size: 28px;
+      }
+
+      input,
+      textarea,
+      select {
+        font-size: 28px !important;
+        padding: 26px 20px;
+      }
+
+      input,
+      select {
+        min-height: 100px;
+      }
+
+      textarea {
+        min-height: 220px;
+      }
+
+      .qr-btn {
+        width: 104px;
+        min-width: 104px;
+        min-height: 100px;
+        font-size: 22px;
+      }
+
+      .btn {
+        font-size: 36px;
+        padding: 20px 16px;
+        min-height: 80px;
+      }
+
+      .top-badge {
+        font-size: 15px;
+        padding: 7px 12px;
+      }
+
+      .message,
+      .done-text,
+      .lookup-status {
+        font-size: 19px;
+      }
+
+      .small-note,
+      .qr-desc,
+      .qr-status {
+        font-size: 17px;
+      }
+
+      .qr-title {
+        font-size: 26px;
+      }
+
+      .qr-actions button {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>GitHub Pages 動作確認OK</h1>
+  <div class="container">
+
+    <div id="homeScreen" class="screen active">
+      <div class="screen-top" id="homeTop"></div>
+      <div class="center">
+        <div class="top-badge">HOME</div>
+      </div>
+      <h1>ホーム</h1>
+      <div class="subtext">
+        業務ページの入口です。<br>
+        お知らせ確認後、業務メニューへ進んでください。
+      </div>
+
+      <div class="box">
+        <div class="box-title">お知らせ</div>
+        <div class="box-text">報告フォーマットデモトライ</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">リンク欄</div>
+        <div class="link-list">
+          <a href="https://www.imuro.jp/" target="_blank" rel="noopener noreferrer">株式会社イムロ</a>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-double" onclick="showScreen('menuScreen')">業務メニューに進む</button>
+    </div>
+
+    <div id="menuScreen" class="screen">
+      <div class="screen-top" id="menuTop"></div>
+      <h1>業務メニュー</h1>
+
+      <button class="btn btn-green btn-triple" onclick="openForm('受入')">1.受入</button>
+      <button class="btn btn-orange btn-triple" onclick="openForm('計画')">2.計画</button>
+      <button class="btn btn-purple btn-triple" onclick="openForm('実績')">3.実績</button>
+      <button class="btn btn-secondary btn-double" onclick="showScreen('homeScreen')">ホームへ戻る</button>
+    </div>
+
+    <div id="formScreen" class="screen">
+      <div class="screen-top" id="formTop"></div>
+      <h1 id="formTitle">登録画面</h1>
+      <div class="subtext" id="formSubtext">
+        必要事項を入力して送信してください。
+      </div>
+
+      <label for="tehaiNo">手配番号</label>
+      <div class="input-row">
+        <div class="grow">
+          <input type="text" id="tehaiNo" placeholder="手配番号を入力" autocomplete="off">
+        </div>
+        <button type="button" class="qr-btn" onclick="openQrModal()">QR</button>
+      </div>
+      <div class="small-note">手入力・貼り付け・QR読取後に、自動で照合します。</div>
+
+      <div id="lookupStatus" class="lookup-status"></div>
+
+      <label for="productCode">商品コード</label>
+      <input type="text" id="productCode" class="readonly" placeholder="自動表示" readonly>
+
+      <label for="productName">商品名</label>
+      <input type="text" id="productName" class="readonly" placeholder="自動表示" readonly>
+
+      <label for="department">部門名</label>
+      <select id="department">
+        <option value="">選択してください</option>
+        <option value="プレスライン">プレスライン</option>
+        <option value="射出成形ライン">射出成形ライン</option>
+        <option value="キソエースライン">キソエースライン</option>
+      </select>
+
+      <label for="quantity">数量</label>
+      <input type="number" id="quantity" placeholder="数量を入力" min="0" step="1" inputmode="numeric">
+
+      <label for="remarks">備考</label>
+      <textarea id="remarks" placeholder="備考を入力"></textarea>
+
+      <button id="submitButton" class="btn btn-primary" onclick="submitForm()">送信</button>
+      <button class="btn btn-secondary" onclick="showScreen('menuScreen')">業務メニューへ戻る</button>
+
+      <div id="message" class="message"></div>
+    </div>
+
+    <div id="doneScreen" class="screen">
+      <div class="screen-top" id="doneTop"></div>
+      <h1 id="doneTitle">送信完了</h1>
+      <div class="done-icon">✅</div>
+      <div class="done-text" id="doneText">
+        登録が完了しました。<br>
+        続けて入力するか、業務メニューへ戻ってください。
+      </div>
+
+      <button class="btn btn-primary" onclick="resetFormAndBackToCurrent()">続けて入力する</button>
+      <button class="btn btn-secondary" onclick="showScreen('menuScreen')">業務メニューへ戻る</button>
+      <button class="btn btn-secondary" onclick="goHome()">ホームへ戻る</button>
+    </div>
+
+  </div>
+
+  <div id="qrModal" class="qr-modal">
+    <div class="qr-card">
+      <div class="qr-title">QR読込</div>
+      <div class="qr-desc">まずカメラ読込を試して、だめなら画像読込を使ってください。</div>
+
+      <div id="qrReader"></div>
+      <div id="qrStatus" class="qr-status"></div>
+
+      <div class="file-scan-box">
+        <div class="file-scan-title">画像から読込</div>
+        <div class="file-scan-note">カメラが使えない時は、QR画像を選んで読み取れます。</div>
+        <input id="qrFileInput" class="file-input" type="file" accept="image/*" onchange="scanQrFromFile(event)">
+      </div>
+
+      <div class="qr-actions">
+        <button type="button" class="qr-close" onclick="closeQrModal()">閉じる</button>
+        <button type="button" class="qr-start" onclick="restartQrCamera()">再起動</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "ここにGASのウェブアプリURLを貼る";
+
+    let currentMenuType = "";
+    let html5QrCode = null;
+    let qrCameraRunning = false;
+    let lookupTimer = null;
+
+    function blurActiveElement() {
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+    }
+
+    function topMap(screenId) {
+      return {
+        homeScreen: "homeTop",
+        menuScreen: "menuTop",
+        formScreen: "formTop",
+        doneScreen: "doneTop"
+      }[screenId];
+    }
+
+    function forceTopByScreen(screenId) {
+      const topEl = document.getElementById(topMap(screenId));
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      if (topEl) {
+        topEl.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+      }
+
+      requestAnimationFrame(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (topEl) {
+          topEl.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+        }
+      });
+
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (topEl) {
+          topEl.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+        }
+      }, 150);
+    }
+
+    function showScreen(screenId) {
+      blurActiveElement();
+      document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+
+      setTimeout(function() {
+        forceTopByScreen(screenId);
+      }, 60);
+    }
+
+    function clearMessage() {
+      const message = document.getElementById("message");
+      message.textContent = "";
+      message.className = "message";
+    }
+
+    function setLookupStatus(text, type) {
+      const el = document.getElementById("lookupStatus");
+      el.textContent = text || "";
+      el.className = "lookup-status";
+      if (type === "ok") el.classList.add("lookup-ok");
+      if (type === "ng") el.classList.add("lookup-ng");
+      if (type === "loading") el.classList.add("lookup-loading");
+    }
+
+    function clearLookupResult() {
+      document.getElementById("productCode").value = "";
+      document.getElementById("productName").value = "";
+    }
+
+    function resetForm() {
+      document.getElementById("tehaiNo").value = "";
+      document.getElementById("productCode").value = "";
+      document.getElementById("productName").value = "";
+      document.getElementById("department").value = "";
+      document.getElementById("quantity").value = "";
+      document.getElementById("remarks").value = "";
+      clearMessage();
+      setLookupStatus("", "");
+    }
+
+    function goHome() {
+      resetForm();
+      blurActiveElement();
+      setTimeout(function() {
+        showScreen("homeScreen");
+      }, 180);
+    }
+
+    function openForm(menuType) {
+      currentMenuType = menuType;
+      document.getElementById("formTitle").textContent = menuType + "登録画面";
+      document.getElementById("formSubtext").textContent = menuType + "に関する内容を入力して送信してください。";
+      document.getElementById("doneTitle").textContent = menuType + "登録完了";
+      document.getElementById("doneText").innerHTML =
+        menuType + "の登録が完了しました。<br>続けて入力するか、業務メニューへ戻ってください。";
+
+      resetForm();
+      blurActiveElement();
+      setTimeout(function() {
+        showScreen("formScreen");
+      }, 180);
+    }
+
+    function resetFormAndBackToCurrent() {
+      resetForm();
+      blurActiveElement();
+      setTimeout(function() {
+        showScreen("formScreen");
+      }, 180);
+    }
+
+    function lookupByTehaiNoDebounced() {
+      const tehaiNo = document.getElementById("tehaiNo").value.trim();
+
+      if (lookupTimer) {
+        clearTimeout(lookupTimer);
+      }
+
+      lookupTimer = setTimeout(function() {
+        runLookup(tehaiNo);
+      }, 300);
+    }
+
+    async function runLookup(tehaiNo) {
+      if (!tehaiNo) {
+        clearLookupResult();
+        setLookupStatus("", "");
+        return;
+      }
+
+      setLookupStatus("照合中...", "loading");
+
+      try {
+        const url = `${GAS_URL}?action=lookup&tehaiNo=${encodeURIComponent(tehaiNo)}`;
+        const res = await fetch(url, { method: "GET" });
+        const result = await res.json();
+
+        if (result && result.found) {
+          document.getElementById("productCode").value = result.productCode || "";
+          document.getElementById("productName").value = result.productName || "";
+          setLookupStatus("商品コード・商品名を反映しました。", "ok");
+        } else {
+          clearLookupResult();
+          setLookupStatus("手配番号がマスタ未登録です。", "ng");
+        }
+      } catch (e) {
+        clearLookupResult();
+        setLookupStatus("照合エラー", "ng");
+      }
+    }
+
+    function setQrStatus(text) {
+      document.getElementById("qrStatus").textContent = text || "";
+    }
+
+    function ensureQrInstance() {
+      if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("qrReader", {
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+        });
+      }
+    }
+
+    async function openQrModal() {
+      document.getElementById("qrModal").classList.add("active");
+      document.getElementById("qrFileInput").value = "";
+      setQrStatus("カメラを起動します...");
+      blurActiveElement();
+      await startQrCamera();
+    }
+
+    async function closeQrModal() {
+      await stopQrCamera();
+      document.getElementById("qrModal").classList.remove("active");
+      setQrStatus("");
+      document.getElementById("qrReader").innerHTML = "";
+      html5QrCode = null;
+      forceTopByScreen("formScreen");
+    }
+
+    async function restartQrCamera() {
+      await stopQrCamera();
+      document.getElementById("qrReader").innerHTML = "";
+      html5QrCode = null;
+      setQrStatus("カメラを再起動します...");
+      await startQrCamera();
+    }
+
+    async function startQrCamera() {
+      try {
+        ensureQrInstance();
+
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+          },
+          async function(decodedText) {
+            const value = String(decodedText || "").trim();
+            if (!value) return;
+
+            setQrStatus("読取完了: " + value);
+            document.getElementById("tehaiNo").value = value;
+
+            await stopQrCamera();
+            document.getElementById("qrModal").classList.remove("active");
+            setQrStatus("");
+            document.getElementById("qrReader").innerHTML = "";
+            html5QrCode = null;
+
+            await runLookup(value);
+            forceTopByScreen("formScreen");
+          },
+          function() {
+          }
+        );
+
+        qrCameraRunning = true;
+        setQrStatus("QRをカメラにかざしてください。");
+      } catch (e) {
+        qrCameraRunning = false;
+        setQrStatus("カメラ起動失敗。画像読込を試してください。");
+      }
+    }
+
+    async function stopQrCamera() {
+      try {
+        if (html5QrCode) {
+          const state = html5QrCode.getState && html5QrCode.getState();
+          if (qrCameraRunning || state === 2) {
+            await html5QrCode.stop();
+          }
+          await html5QrCode.clear();
+        }
+      } catch (e) {
+      } finally {
+        qrCameraRunning = false;
+      }
+    }
+
+    async function scanQrFromFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      try {
+        setQrStatus("画像を解析中...");
+        ensureQrInstance();
+        const decodedText = await html5QrCode.scanFile(file, true);
+        const value = String(decodedText || "").trim();
+
+        if (!value) {
+          setQrStatus("QRを読み取れませんでした。");
+          return;
+        }
+
+        document.getElementById("tehaiNo").value = value;
+        setQrStatus("読取完了: " + value);
+        await closeQrModal();
+        await runLookup(value);
+      } catch (e) {
+        setQrStatus("画像読取に失敗しました。");
+      } finally {
+        event.target.value = "";
+      }
+    }
+
+    async function submitForm() {
+      const message = document.getElementById("message");
+      const button = document.getElementById("submitButton");
+
+      const formData = {
+        action: "save",
+        menuType: currentMenuType,
+        tehaiNo: document.getElementById("tehaiNo").value.trim(),
+        productCode: document.getElementById("productCode").value.trim(),
+        productName: document.getElementById("productName").value.trim(),
+        department: document.getElementById("department").value,
+        quantity: document.getElementById("quantity").value.trim(),
+        remarks: document.getElementById("remarks").value.trim()
+      };
+
+      if (!currentMenuType) {
+        message.textContent = "業務メニューから画面を選択してください。";
+        message.className = "message error";
+        forceTopByScreen("formScreen");
+        return;
+      }
+
+      if (!formData.tehaiNo) {
+        message.textContent = "手配番号は必須です。";
+        message.className = "message error";
+        forceTopByScreen("formScreen");
+        return;
+      }
+
+      if (!formData.productCode || !formData.productName) {
+        message.textContent = "手配番号の照合を行い、商品コード・商品名を表示させてください。";
+        message.className = "message error";
+        forceTopByScreen("formScreen");
+        return;
+      }
+
+      if (!formData.department || !formData.quantity) {
+        message.textContent = "部門名、数量は必須です。";
+        message.className = "message error";
+        forceTopByScreen("formScreen");
+        return;
+      }
+
+      button.disabled = true;
+      message.textContent = "送信中...";
+      message.className = "message loading";
+
+      blurActiveElement();
+
+      try {
+        const body = new URLSearchParams();
+        Object.keys(formData).forEach(function(key) {
+          body.append(key, formData[key]);
+        });
+
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          body: body
+        });
+
+        const result = await res.json();
+
+        button.disabled = false;
+
+        if (result.success) {
+          setTimeout(function() {
+            showScreen("doneScreen");
+          }, 300);
+        } else {
+          message.textContent = result.message || "送信に失敗しました。";
+          message.className = "message error";
+          forceTopByScreen("formScreen");
+        }
+      } catch (e) {
+        button.disabled = false;
+        message.textContent = "通信エラー";
+        message.className = "message error";
+        forceTopByScreen("formScreen");
+      }
+    }
+
+    document.getElementById("tehaiNo").addEventListener("input", lookupByTehaiNoDebounced);
+    document.getElementById("tehaiNo").addEventListener("blur", lookupByTehaiNoDebounced);
+  </script>
 </body>
 </html>
