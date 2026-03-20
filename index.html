@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>業務フォーム</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <style>
@@ -23,23 +23,24 @@
       font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
       background: #f4f7fb;
       margin: 0;
-      padding: 4px;
+      padding: 10px;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      color: #111827;
     }
 
     .container {
-      max-width: 760px;
+      max-width: 720px;
       margin: 0 auto;
       background: #fff;
-      border-radius: 16px;
-      padding: 10px;
+      border-radius: 14px;
+      padding: 16px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
     h1 {
-      font-size: 32px;
-      margin: 0 0 14px;
+      font-size: 28px;
+      margin: 0 0 12px;
       text-align: center;
       color: #1f2937;
     }
@@ -47,9 +48,9 @@
     .subtext {
       text-align: center;
       color: #6b7280;
-      margin-bottom: 20px;
-      line-height: 1.8;
-      font-size: 19px;
+      margin-bottom: 18px;
+      line-height: 1.7;
+      font-size: 15px;
     }
 
     .screen {
@@ -68,67 +69,66 @@
     .box {
       background: #f9fafb;
       border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 18px;
-      margin-top: 16px;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
     }
 
     .box-title {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       color: #111827;
     }
 
     .box-text {
       color: #4b5563;
-      line-height: 1.8;
-      font-size: 19px;
+      line-height: 1.7;
+      font-size: 15px;
       white-space: pre-line;
     }
 
     .link-list a {
       display: block;
-      margin-top: 10px;
+      margin-top: 8px;
       color: #1976d2;
       text-decoration: none;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 16px;
     }
 
     label {
       display: block;
-      margin-top: 24px;
-      margin-bottom: 10px;
+      margin-top: 18px;
+      margin-bottom: 8px;
       font-weight: bold;
       color: #111827;
-      font-size: 28px;
+      font-size: 18px;
     }
 
     input,
     textarea,
     select {
       width: 100%;
-      padding: 26px 20px;
-      border: 3px solid #cfd8e3;
-      border-radius: 18px;
+      padding: 14px 12px;
+      border: 2px solid #cfd8e3;
+      border-radius: 12px;
       box-sizing: border-box;
-      font-size: 28px !important;
+      font-size: 16px;
       line-height: 1.45;
       background: #fff;
       color: #111827;
       appearance: none;
       -webkit-appearance: none;
-      -webkit-text-size-adjust: 100%;
     }
 
     input,
     select {
-      min-height: 100px;
+      min-height: 52px;
     }
 
     textarea {
-      min-height: 220px;
+      min-height: 130px;
       resize: vertical;
     }
 
@@ -137,13 +137,12 @@
     select:focus {
       outline: none;
       border-color: #1976d2;
-      box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.14);
-      font-size: 28px !important;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
     }
 
     input::placeholder,
     textarea::placeholder {
-      font-size: 24px;
+      font-size: 15px;
       color: #9ca3af;
     }
 
@@ -153,7 +152,7 @@
 
     .input-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: stretch;
     }
 
@@ -162,31 +161,31 @@
     }
 
     .qr-btn {
-      width: 110px;
-      min-width: 110px;
-      min-height: 100px;
+      width: 78px;
+      min-width: 78px;
+      min-height: 52px;
       border: none;
-      border-radius: 18px;
+      border-radius: 12px;
       background: #111827;
       color: #fff;
-      font-size: 24px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
     .small-note {
-      margin-top: 8px;
+      margin-top: 6px;
       color: #6b7280;
-      font-size: 18px;
+      font-size: 13px;
       line-height: 1.6;
     }
 
     .lookup-status {
-      margin-top: 12px;
-      font-size: 20px;
+      margin-top: 10px;
+      font-size: 15px;
       font-weight: bold;
       text-align: center;
-      min-height: 28px;
+      min-height: 22px;
     }
 
     .lookup-ok {
@@ -203,12 +202,12 @@
 
     .btn {
       width: 100%;
-      margin-top: 20px;
-      padding: 22px 18px;
-      min-height: 84px;
+      margin-top: 16px;
+      padding: 16px 14px;
+      min-height: 54px;
       border: none;
-      border-radius: 16px;
-      font-size: 40px;
+      border-radius: 12px;
+      font-size: 22px;
       font-weight: bold;
       line-height: 1.2;
       cursor: pointer;
@@ -240,18 +239,18 @@
     }
 
     .btn-double {
-      min-height: 128px;
+      min-height: 82px;
     }
 
     .btn-triple {
-      min-height: 178px;
+      min-height: 110px;
     }
 
     .message {
-      margin-top: 18px;
+      margin-top: 14px;
       text-align: center;
       font-weight: bold;
-      font-size: 22px;
+      font-size: 16px;
     }
 
     .success {
@@ -267,28 +266,28 @@
     }
 
     .done-icon {
-      font-size: 60px;
+      font-size: 42px;
       text-align: center;
-      margin: 10px 0 16px;
+      margin: 10px 0 12px;
     }
 
     .done-text {
       text-align: center;
-      font-size: 21px;
-      line-height: 1.9;
+      font-size: 16px;
+      line-height: 1.8;
       color: #374151;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .top-badge {
       display: inline-block;
-      padding: 8px 14px;
+      padding: 6px 10px;
       border-radius: 999px;
       background: #eff6ff;
       color: #1d4ed8;
-      font-size: 16px;
+      font-size: 12px;
       font-weight: bold;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .center {
@@ -312,78 +311,78 @@
 
     .qr-card {
       width: 100%;
-      max-width: 720px;
+      max-width: 640px;
       background: #fff;
-      border-radius: 18px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: 14px;
     }
 
     .qr-title {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: bold;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: #111827;
     }
 
     .qr-desc {
-      font-size: 18px;
+      font-size: 14px;
       color: #4b5563;
-      line-height: 1.7;
+      line-height: 1.6;
       text-align: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     #qrReader {
       width: 100%;
-      min-height: 280px;
-      border-radius: 16px;
+      min-height: 240px;
+      border-radius: 14px;
       overflow: hidden;
       background: #000;
     }
 
     .file-scan-box {
-      margin-top: 14px;
-      padding: 14px;
+      margin-top: 12px;
+      padding: 12px;
       border: 2px dashed #cfd8e3;
-      border-radius: 14px;
+      border-radius: 12px;
       background: #f9fafb;
     }
 
     .file-scan-title {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: bold;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-align: center;
       color: #111827;
     }
 
     .file-scan-note {
-      font-size: 16px;
+      font-size: 13px;
       color: #6b7280;
       line-height: 1.6;
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .file-input {
       width: 100%;
-      font-size: 20px;
-      padding: 10px;
+      font-size: 14px;
+      padding: 8px;
     }
 
     .qr-actions {
       display: flex;
-      gap: 10px;
-      margin-top: 14px;
+      gap: 8px;
+      margin-top: 12px;
     }
 
     .qr-actions button {
       flex: 1;
-      min-height: 72px;
+      min-height: 52px;
       border: none;
-      border-radius: 14px;
-      font-size: 28px;
+      border-radius: 12px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -399,100 +398,57 @@
     }
 
     .qr-status {
-      margin-top: 12px;
+      margin-top: 10px;
       text-align: center;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: bold;
       color: #1976d2;
-      min-height: 28px;
+      min-height: 22px;
       line-height: 1.6;
     }
 
     @media (max-width: 600px) {
       body {
-        padding: 2px;
+        padding: 6px;
       }
 
       .container {
         max-width: 100%;
         margin: 0 auto;
-        padding: 8px;
+        padding: 12px;
         border-radius: 12px;
       }
 
       h1 {
-        font-size: 30px;
+        font-size: 24px;
       }
 
       .subtext {
-        font-size: 18px;
+        font-size: 14px;
       }
 
       .box-title {
-        font-size: 22px;
+        font-size: 17px;
       }
 
       .box-text,
       .link-list a {
-        font-size: 18px;
+        font-size: 14px;
       }
 
       label {
-        font-size: 28px;
+        font-size: 17px;
       }
 
       input,
       textarea,
       select {
-        font-size: 28px !important;
-        padding: 26px 20px;
-      }
-
-      input,
-      select {
-        min-height: 100px;
-      }
-
-      textarea {
-        min-height: 220px;
-      }
-
-      .qr-btn {
-        width: 104px;
-        min-width: 104px;
-        min-height: 100px;
-        font-size: 22px;
+        font-size: 16px;
+        padding: 14px 12px;
       }
 
       .btn {
-        font-size: 36px;
-        padding: 20px 16px;
-        min-height: 80px;
-      }
-
-      .top-badge {
-        font-size: 15px;
-        padding: 7px 12px;
-      }
-
-      .message,
-      .done-text,
-      .lookup-status {
-        font-size: 19px;
-      }
-
-      .small-note,
-      .qr-desc,
-      .qr-status {
-        font-size: 17px;
-      }
-
-      .qr-title {
-        font-size: 26px;
-      }
-
-      .qr-actions button {
-        font-size: 24px;
+        font-size: 20px;
       }
     }
   </style>
@@ -650,24 +606,6 @@
       if (topEl) {
         topEl.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
       }
-
-      requestAnimationFrame(function() {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        if (topEl) {
-          topEl.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
-        }
-      });
-
-      setTimeout(function() {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        if (topEl) {
-          topEl.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
-        }
-      }, 150);
     }
 
     function showScreen(screenId) {
@@ -677,7 +615,7 @@
 
       setTimeout(function() {
         forceTopByScreen(screenId);
-      }, 60);
+      }, 30);
     }
 
     function clearMessage() {
@@ -713,10 +651,7 @@
 
     function goHome() {
       resetForm();
-      blurActiveElement();
-      setTimeout(function() {
-        showScreen("homeScreen");
-      }, 180);
+      showScreen("homeScreen");
     }
 
     function openForm(menuType) {
@@ -728,18 +663,12 @@
         menuType + "の登録が完了しました。<br>続けて入力するか、業務メニューへ戻ってください。";
 
       resetForm();
-      blurActiveElement();
-      setTimeout(function() {
-        showScreen("formScreen");
-      }, 180);
+      showScreen("formScreen");
     }
 
     function resetFormAndBackToCurrent() {
       resetForm();
-      blurActiveElement();
-      setTimeout(function() {
-        showScreen("formScreen");
-      }, 180);
+      showScreen("formScreen");
     }
 
     function normalizeTehaiNo(value) {
@@ -772,7 +701,7 @@
 
       lookupTimer = setTimeout(function() {
         runLookupJsonp(raw);
-      }, 300);
+      }, 250);
     }
 
     function runLookupJsonp(tehaiNo) {
@@ -813,7 +742,6 @@
 
         window[callbackName] = function(result) {
           clearTimeout(timer);
-
           try {
             if (result && result.found) {
               document.getElementById("productCode").value = result.productCode || "";
@@ -864,7 +792,6 @@
       document.getElementById("qrModal").classList.add("active");
       document.getElementById("qrFileInput").value = "";
       setQrStatus("カメラを起動します...");
-      blurActiveElement();
       await startQrCamera();
     }
 
@@ -893,7 +820,7 @@
           { facingMode: "environment" },
           {
             fps: 10,
-            qrbox: { width: 250, height: 250 },
+            qrbox: { width: 220, height: 220 },
             aspectRatio: 1.0
           },
           async function(decodedText) {
@@ -1023,8 +950,6 @@
       message.textContent = "送信中...";
       message.className = "message loading";
 
-      blurActiveElement();
-
       try {
         const body = new URLSearchParams();
         Object.keys(formData).forEach(function(key) {
@@ -1051,7 +976,7 @@
         if (result.success) {
           setTimeout(function() {
             showScreen("doneScreen");
-          }, 300);
+          }, 200);
         } else {
           message.textContent = result.message || "送信に失敗しました。";
           message.className = "message error";
@@ -1065,7 +990,6 @@
       }
     }
 
-    document.getElementById("tehaiNo").addEventListener("input", lookupByTehaiNoDebounced);
     document.getElementById("tehaiNo").addEventListener("blur", lookupByTehaiNoDebounced);
   </script>
 </body>
