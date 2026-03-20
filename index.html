@@ -128,7 +128,7 @@
     }
 
     textarea {
-      min-height: 130px;
+      min-height: 78px;
       resize: vertical;
     }
 
@@ -407,6 +407,17 @@
       line-height: 1.6;
     }
 
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .form-item {
+      min-width: 0;
+    }
+
     @media (max-width: 600px) {
       body {
         padding: 6px;
@@ -449,6 +460,11 @@
 
       .btn {
         font-size: 20px;
+      }
+
+      .form-grid-2 {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
       }
     }
   </style>
@@ -499,33 +515,45 @@
         必要事項を入力して送信してください。
       </div>
 
-      <label for="tehaiNo">手配番号</label>
-      <div class="input-row">
-        <div class="grow">
-          <input type="text" id="tehaiNo" placeholder="手配番号を入力" autocomplete="off">
+      <div class="form-grid-2">
+        <div class="form-item">
+          <label for="tehaiNo">手配番号</label>
+          <div class="input-row">
+            <div class="grow">
+              <input type="text" id="tehaiNo" placeholder="手配番号を入力" autocomplete="off">
+            </div>
+            <button type="button" class="qr-btn" onclick="openQrModal()">QR</button>
+          </div>
         </div>
-        <button type="button" class="qr-btn" onclick="openQrModal()">QR</button>
+
+        <div class="form-item">
+          <label for="productCode">商品コード</label>
+          <input type="text" id="productCode" class="readonly" placeholder="自動表示" readonly>
+        </div>
       </div>
+
       <div class="small-note">手入力・貼り付け・QR読取後に、自動で照合します。</div>
-
       <div id="lookupStatus" class="lookup-status"></div>
-
-      <label for="productCode">商品コード</label>
-      <input type="text" id="productCode" class="readonly" placeholder="自動表示" readonly>
 
       <label for="productName">商品名</label>
       <input type="text" id="productName" class="readonly" placeholder="自動表示" readonly>
 
-      <label for="department">部門名</label>
-      <select id="department">
-        <option value="">選択してください</option>
-        <option value="プレスライン">プレスライン</option>
-        <option value="射出成形ライン">射出成形ライン</option>
-        <option value="キソエースライン">キソエースライン</option>
-      </select>
+      <div class="form-grid-2">
+        <div class="form-item">
+          <label for="department">部門名</label>
+          <select id="department">
+            <option value="">選択してください</option>
+            <option value="プレスライン">プレスライン</option>
+            <option value="射出成形ライン">射出成形ライン</option>
+            <option value="キソエースライン">キソエースライン</option>
+          </select>
+        </div>
 
-      <label for="quantity">数量</label>
-      <input type="number" id="quantity" placeholder="数量を入力" min="0" step="1" inputmode="numeric">
+        <div class="form-item">
+          <label for="quantity">数量</label>
+          <input type="number" id="quantity" placeholder="数量を入力" min="0" step="1" inputmode="numeric">
+        </div>
+      </div>
 
       <label for="remarks">備考</label>
       <textarea id="remarks" placeholder="備考を入力"></textarea>
