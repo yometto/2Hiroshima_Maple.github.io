@@ -741,19 +741,43 @@
       }, 180);
     }
 
+    function normalizeTehaiNo(value) {
+      let tehaiNo = String(value || "").trim();
+
+      if (tehaiNo.indexOf("手配番号:") === 0) {
+        tehaiNo = tehaiNo.replace("手配番号:", "").trim();
+      }
+
+      if (tehaiNo.indexOf("tehaiNo=") !== -1) {
+        try {
+          const url = new URL(tehaiNo);
+          const param = url.searchParams.get("tehaiNo");
+          if (param) {
+            tehaiNo = String(param).trim();
+          }
+        } catch (e) {
+        }
+      }
+
+      return tehaiNo;
+    }
+
     function lookupByTehaiNoDebounced() {
-      const tehaiNo = document.getElementById("tehaiNo").value.trim();
+      const raw = document.getElementById("tehaiNo").value;
 
       if (lookupTimer) {
         clearTimeout(lookupTimer);
       }
 
       lookupTimer = setTimeout(function() {
-        runLookup(tehaiNo);
+        runLookup(raw);
       }, 300);
     }
 
     async function runLookup(tehaiNo) {
+      tehaiNo = normalizeTehaiNo(tehaiNo);
+      document.getElementById("tehaiNo").value = tehaiNo;
+
       if (!tehaiNo) {
         clearLookupResult();
         setLookupStatus("", "");
@@ -765,7 +789,15 @@
       try {
         const url = `${GAS_URL}?action=lookup&tehaiNo=${encodeURIComponent(tehaiNo)}`;
         const res = await fetch(url, { method: "GET" });
-        const result = await res.json();
+        const text = await res.text();
+
+        let result;
+        try {
+          result = JSON.parse(text);
+        } catch (e) {
+          console.log("GAS response text:", text);
+          throw new Error("JSONではない応答が返りました");
+        }
 
         if (result && result.found) {
           document.getElementById("productCode").value = result.productCode || "";
@@ -773,11 +805,12 @@
           setLookupStatus("商品コード・商品名を反映しました。", "ok");
         } else {
           clearLookupResult();
-          setLookupStatus("手配番号がマスタ未登録です。", "ng");
+          setLookupStatus(result.message || "手配番号がマスタ未登録です。", "ng");
         }
       } catch (e) {
         clearLookupResult();
-        setLookupStatus("照合エラー", "ng");
+        console.log("lookup error:", e);
+        setLookupStatus("照合エラー: " + e.message, "ng");
       }
     }
 
@@ -905,13 +938,15 @@
       const formData = {
         action: "save",
         menuType: currentMenuType,
-        tehaiNo: document.getElementById("tehaiNo").value.trim(),
+        tehaiNo: normalizeTehaiNo(document.getElementById("tehaiNo").value),
         productCode: document.getElementById("productCode").value.trim(),
         productName: document.getElementById("productName").value.trim(),
         department: document.getElementById("department").value,
         quantity: document.getElementById("quantity").value.trim(),
         remarks: document.getElementById("remarks").value.trim()
       };
+
+      document.getElementById("tehaiNo").value = formData.tehaiNo;
 
       if (!currentMenuType) {
         message.textContent = "業務メニューから画面を選択してください。";
@@ -958,7 +993,15 @@
           body: body
         });
 
-        const result = await res.json();
+        const text = await res.text();
+
+        let result;
+        try {
+          result = JSON.parse(text);
+        } catch (e) {
+          console.log("save response text:", text);
+          throw new Error("JSONではない応答が返りました");
+        }
 
         button.disabled = false;
 
@@ -973,7 +1016,7 @@
         }
       } catch (e) {
         button.disabled = false;
-        message.textContent = "通信エラー";
+        message.textContent = "通信エラー: " + e.message;
         message.className = "message error";
         forceTopByScreen("formScreen");
       }
