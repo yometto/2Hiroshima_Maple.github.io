@@ -624,6 +624,7 @@
     let html5QrCode = null;
     let qrCameraRunning = false;
     let lookupTimer = null;
+    let jsonpCounter = 0;
 
     function blurActiveElement() {
       if (document.activeElement && typeof document.activeElement.blur === "function") {
@@ -770,48 +771,81 @@
       }
 
       lookupTimer = setTimeout(function() {
-        runLookup(raw);
+        runLookupJsonp(raw);
       }, 300);
     }
 
-    async function runLookup(tehaiNo) {
-      tehaiNo = normalizeTehaiNo(tehaiNo);
-      document.getElementById("tehaiNo").value = tehaiNo;
+    function runLookupJsonp(tehaiNo) {
+      return new Promise(function(resolve, reject) {
+        tehaiNo = normalizeTehaiNo(tehaiNo);
+        document.getElementById("tehaiNo").value = tehaiNo;
 
-      if (!tehaiNo) {
-        clearLookupResult();
-        setLookupStatus("", "");
-        return;
-      }
-
-      setLookupStatus("照合中...", "loading");
-
-      try {
-        const url = `${GAS_URL}?action=lookup&tehaiNo=${encodeURIComponent(tehaiNo)}`;
-        const res = await fetch(url, { method: "GET" });
-        const text = await res.text();
-
-        let result;
-        try {
-          result = JSON.parse(text);
-        } catch (e) {
-          console.log("GAS response text:", text);
-          throw new Error("JSONではない応答が返りました");
-        }
-
-        if (result && result.found) {
-          document.getElementById("productCode").value = result.productCode || "";
-          document.getElementById("productName").value = result.productName || "";
-          setLookupStatus("商品コード・商品名を反映しました。", "ok");
-        } else {
+        if (!tehaiNo) {
           clearLookupResult();
-          setLookupStatus(result.message || "手配番号がマスタ未登録です。", "ng");
+          setLookupStatus("", "");
+          resolve(null);
+          return;
         }
-      } catch (e) {
-        clearLookupResult();
-        console.log("lookup error:", e);
-        setLookupStatus("照合エラー: " + e.message, "ng");
-      }
+
+        setLookupStatus("照合中...", "loading");
+
+        jsonpCounter += 1;
+        const callbackName = "lookupCallback_" + Date.now() + "_" + jsonpCounter;
+        const script = document.createElement("script");
+
+        const cleanup = function() {
+          try {
+            delete window[callbackName];
+          } catch (e) {
+            window[callbackName] = undefined;
+          }
+          if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+        };
+
+        const timer = setTimeout(function() {
+          clearLookupResult();
+          setLookupStatus("照合エラー: timeout", "ng");
+          cleanup();
+          reject(new Error("timeout"));
+        }, 10000);
+
+        window[callbackName] = function(result) {
+          clearTimeout(timer);
+
+          try {
+            if (result && result.found) {
+              document.getElementById("productCode").value = result.productCode || "";
+              document.getElementById("productName").value = result.productName || "";
+              setLookupStatus("商品コード・商品名を反映しました。", "ok");
+            } else {
+              clearLookupResult();
+              setLookupStatus((result && result.message) || "手配番号がマスタ未登録です。", "ng");
+            }
+            resolve(result);
+          } finally {
+            cleanup();
+          }
+        };
+
+        script.onerror = function() {
+          clearTimeout(timer);
+          clearLookupResult();
+          setLookupStatus("照合エラー: Load failed", "ng");
+          cleanup();
+          reject(new Error("Load failed"));
+        };
+
+        script.src =
+          GAS_URL +
+          "?action=lookup" +
+          "&tehaiNo=" + encodeURIComponent(tehaiNo) +
+          "&callback=" + encodeURIComponent(callbackName) +
+          "&_ts=" + Date.now();
+
+        document.body.appendChild(script);
+      });
     }
 
     function setQrStatus(text) {
@@ -875,7 +909,11 @@
             document.getElementById("qrReader").innerHTML = "";
             html5QrCode = null;
 
-            await runLookup(value);
+            try {
+              await runLookupJsonp(value);
+            } catch (e) {
+              console.log("QR lookup error:", e);
+            }
             forceTopByScreen("formScreen");
           },
           function() {
@@ -923,7 +961,12 @@
         document.getElementById("tehaiNo").value = value;
         setQrStatus("読取完了: " + value);
         await closeQrModal();
-        await runLookup(value);
+
+        try {
+          await runLookupJsonp(value);
+        } catch (e) {
+          console.log("File QR lookup error:", e);
+        }
       } catch (e) {
         setQrStatus("画像読取に失敗しました。");
       } finally {
